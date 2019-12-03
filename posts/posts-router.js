@@ -6,7 +6,7 @@ const router = express.Router();
 
 router.use(express.json());
 
-// gets an array of posts contained in the database.
+// client makes GET request to retrieve an array of posts contained in the database.
 router.get('/', (req, res) => {
     Posts.find(req.query)
     .then(posts => {
@@ -20,7 +20,7 @@ router.get('/', (req, res) => {
     });
 });
 
-// gets post object by specified ID
+// client makes GET request to retrieve post object by specified ID
 router.get('/:id', (req, res) => {
     Posts.findById(req.params.id)
     .then(post => {
@@ -34,6 +34,24 @@ router.get('/:id', (req, res) => {
         console.log('ID not valid', err);
         res.status(500).json({ error: 'The post information could not be retrieved.' });
     });
+})
+// ****SUB ROUTES****
+// client makes GET request to retrieve all comments on a specific post
+router.get('/:id/comments', (req, res) => {
+    const postID = req.params.id;
+
+    Posts.findPostComments(postID)
+    .then(comments => {
+        if (!postID) {
+            res.status(404).json({ message: 'The post with the specified ID does not exist.' })
+        } else {
+            res.status(200).json(comments)
+        }
+    })
+    .catch(err => {
+        console.log(err);
+        res.status(500).json({ error: 'The comments information could not be retrieved.' })
+    })
 })
 
 //export default 
