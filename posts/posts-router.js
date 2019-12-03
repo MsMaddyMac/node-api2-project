@@ -77,6 +77,28 @@ router.delete('/:id', (req, res) => {
     })
 })
 
+// client makes PUT request to update post by specified ID
+router.put('/:id', (req, res) => {
+    const edits = req.body;
+    const id = req.params.id;
+
+    Posts.update(id, edits)
+    .then(post => {
+        if(post.length === 0) {
+            res.status(404).json({ message: 'The post with the specified ID does not exist.' })
+        }
+        if(!edits.title || !edits.contents) {
+            res.status(400).json({ errorMessage: 'Please provide title and contents for the post.' })
+        } else {
+            res.status(200).json({post: `post ${id} was updated!`});
+        }
+    })
+    .catch(err => {
+        console.log('error on PUT /:id', err);
+        res.status(500).json({ error: 'The post information could not be modified.' });
+    });
+});
+
 // ****SUB ROUTES****
 // client makes GET request to retrieve all comments on a specific post
 router.get('/:id/comments', (req, res) => {
