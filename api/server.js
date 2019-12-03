@@ -1,12 +1,18 @@
 const express = require('express');
 
+const postsRouter = require('../posts/posts-router');
+
 const server = express();
 
 server.use(express.json());
 
 server.get('/', (req, res) => {
-    res.send(`<h2>Lambda Chat API<h2>`);
+    res.send(`
+        <h2>Lambda Chat API<h2>
+    `);
 });
 
-const port = 4004;
-server.listen(port, () => console.log(`API listening on port ${port}!`));
+server.use('/api/posts', postsRouter);
+
+module.exports = server;
+
