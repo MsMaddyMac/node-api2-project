@@ -59,6 +59,24 @@ router.post('/', (req, res) => {
     }
 })
 
+// client makes a DELETE request to delete a post by specified id
+router.delete('/:id', (req, res) => {
+    const id = req.params.id;
+
+    Posts.remove(id)
+    .then(post => {
+        if(post.length === 0) {
+            res.status(404).json({ message: 'The post with the specified ID does not exist.' })
+        } else {
+            res.status(200).json({ message: 'The post is history!' });
+        }
+    })
+    .catch(err => {
+        console.log('error on DELETE /:id', err);
+        res.status(500).json({ error: "The post could not be removed" })
+    })
+})
+
 // ****SUB ROUTES****
 // client makes GET request to retrieve all comments on a specific post
 router.get('/:id/comments', (req, res) => {
