@@ -81,5 +81,27 @@ router.get('/:id/comments', (req, res) => {
     })
 })
 
+// client makes a POST request to create a comment on a specific post
+router.post('/:id/comments', (req, res) => {
+    const commentData = req.body;
+    const id = req.params.id;
+
+    Posts.insertComment(commentData)
+        .then(comment => {
+            if (id.length === 0) {
+                res.status(404).json({ message: 'The post with the specified ID does not exist.' })
+            }
+            if (!commentData.text) {
+                res.status(400).json({ errorMessage: 'Please provide text for the comment.' })
+            } else {
+                res.status(201).json(comment);
+            }
+        })
+        .catch(err => {
+            console.log(`error on POST /${id}/comments`, err)
+            res.status(500).json({ error: 'There was an error while saving the comment to the database.' })
+        })
+})
+
 //export default 
 module.exports = router;
