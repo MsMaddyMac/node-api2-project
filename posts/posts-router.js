@@ -35,6 +35,30 @@ router.get('/:id', (req, res) => {
         res.status(500).json({ error: 'The post information could not be retrieved.' });
     });
 })
+
+// client makes POST request to add a post to the database
+router.post('/', (req, res) => {
+    const newPost = req.body;
+
+    if (!newPost.title || !newPost.contents) {
+        res
+            .status(400)
+            .json({ errorMessage: 'Please provide title and contents for the post.' })
+    } else {
+        Posts
+            .insert(newPost)
+            .then (post => {
+                res.status(201)
+                .json(post);
+        })
+        .catch(err => {
+            console.log('error on POST /posts', err)
+            res.status(500)
+            .json({ error: 'There was an error while saving the post to the database.' })
+        })
+    }
+})
+
 // ****SUB ROUTES****
 // client makes GET request to retrieve all comments on a specific post
 router.get('/:id/comments', (req, res) => {
