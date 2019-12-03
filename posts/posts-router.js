@@ -42,14 +42,17 @@ router.get('/:id/comments', (req, res) => {
 
     Posts.findPostComments(postID)
     .then(comments => {
-        if (!postID) {
+        if (postID.length === 0 ) {
             res.status(404).json({ message: 'The post with the specified ID does not exist.' })
+        } 
+        if (comments.length === 0) {
+            res.status(400).json({ errorMessage: 'No comments here.' });
         } else {
-            res.status(200).json(comments)
-        }
+            res.status(200).json(comments);
+        }  
     })
     .catch(err => {
-        console.log(err);
+        console.log('Comments could not be retrieved', err);
         res.status(500).json({ error: 'The comments information could not be retrieved.' })
     })
 })
