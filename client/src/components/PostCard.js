@@ -8,8 +8,8 @@ import styled from "styled-components";
 
 const FlipCard = styled.div`
   background-color: transparent;
-  width: 300px;
-  height: 200px;
+  width: 400px;
+  height: 230px;
   border: 3px solid #f1f1f1;
   perspective: 1000px;
   display: flex;
